@@ -24,10 +24,10 @@ const HistoryPage = () => {
     <div className="space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h2 className="font-head text-2xl font-black text-white tracking-tight flex items-center gap-3 underline decoration-cyan/30 decoration-4 underline-offset-8 uppercase">
-            <History size={24} className="text-cyan" /> VIOLATION ARCHIVE
+          <h2 className="font-head text-2xl font-black text-text tracking-tight flex items-center gap-3 underline decoration-cyan/30 decoration-4 underline-offset-8 uppercase">
+            <History size={24} className="text-cyan" /> SCAN HISTORY
           </h2>
-          <p className="text-text2 text-xs font-bold uppercase tracking-[0.2em] mt-4">Historical Compliance Records</p>
+          <p className="text-text2 text-xs font-bold uppercase tracking-[0.2em] mt-4">All Lookups & Compliance Records</p>
         </div>
         
         <div className="flex flex-wrap items-center gap-3">
@@ -36,10 +36,10 @@ const HistoryPage = () => {
             <input 
               type="text" 
               placeholder="PLATE_SEARCH" 
-              className="bg-bg2 border border-white/5 rounded-xl pl-10 pr-4 py-2.5 text-[10px] font-black text-white placeholder:text-text3/50 focus:outline-none focus:border-cyan/50 focus:bg-bg3/50 transition-all uppercase tracking-widest min-w-[200px]" 
+              className="bg-bg3 border border-border rounded-xl pl-10 pr-4 py-2.5 text-[10px] font-black text-text placeholder:text-text3/50 focus:outline-none focus:border-cyan/50 transition-all uppercase tracking-widest min-w-[200px]" 
             />
           </div>
-          <button className="premium-btn px-6 py-2.5 text-[10px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/10 hover:bg-white/10 transition-colors flex items-center gap-2">
+          <button className="premium-btn px-6 py-2.5 text-[10px] font-black uppercase tracking-widest bg-bg3 border border-border hover:bg-bg4 transition-colors flex items-center gap-2">
             <Download size={14} /> CSV
           </button>
           <button className="premium-btn btn-primary px-6 py-2.5 text-[10px] font-black uppercase tracking-widest shadow-xl flex items-center gap-2">
@@ -61,7 +61,7 @@ const HistoryPage = () => {
                 <th className="px-8 py-5 border-b border-white/5 text-[9px] font-black text-text3 uppercase tracking-[0.2em] text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/[0.03]">
+            <tbody className="divide-y divide-border">
               {loading ? (
                 <tr>
                   <td colSpan="6" className="px-8 py-20 text-center">
@@ -84,10 +84,10 @@ const HistoryPage = () => {
                 history.map((record, i) => (
                   <tr key={i} className="hover:bg-white/[0.01] transition-all group">
                     <td className="px-8 py-5">
-                      <div className="flex flex-col">
-                        <span className="text-white text-[11px] font-bold tracking-tight">{new Date(record.date).toLocaleDateString()}</span>
-                        <span className="text-text3 text-[9px] font-mono mt-1 uppercase">{new Date(record.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second: '2-digit'})}</span>
-                      </div>
+                    <div className="flex flex-col">
+                        <span className="text-text text-[11px] font-bold tracking-tight">{new Date(record.scannedAt || record.date).toLocaleDateString()}</span>
+                        <span className="text-text3 text-[9px] font-mono mt-1 uppercase">{new Date(record.scannedAt || record.date).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second: '2-digit'})}</span>
+                    </div>
                     </td>
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-3">
@@ -100,12 +100,14 @@ const HistoryPage = () => {
                     </td>
                     <td className="px-8 py-5">
                       <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-red/60"></span>
-                        <span className="text-white text-[11px] font-bold uppercase tracking-tighter">{record.violation}</span>
+                        <span className={`w-1 h-1 rounded-full ${record.violation === 'Clean Record' ? 'bg-green/60' : 'bg-red/60'}`}></span>
+                        <span className={`text-[11px] font-bold uppercase tracking-tighter ${record.violation === 'Clean Record' ? 'text-green' : 'text-text'}`}>{record.violation}</span>
                       </div>
                     </td>
                     <td className="px-8 py-5 text-right">
-                      <span className="text-red font-mono text-sm font-black tracking-tight">₹{record.fineAmount}</span>
+                      <span className={`font-mono text-sm font-black tracking-tight ${record.fineAmount > 0 ? 'text-red' : 'text-text3'}`}>
+                        {record.fineAmount > 0 ? `₹${record.fineAmount}` : '—'}
+                      </span>
                     </td>
                     <td className="px-8 py-5 text-center">
                       <div className="flex items-center justify-center gap-2">

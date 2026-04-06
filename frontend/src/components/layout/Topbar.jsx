@@ -24,11 +24,11 @@ const Topbar = ({ onMenuClick }) => {
   };
 
   return (
-    <div className="flex items-center justify-between gap-4 px-4 md:px-8 py-4 bg-bg/80 backdrop-blur-xl border-b border-white/[0.05] sticky top-0 z-[100]">
+    <div className="flex items-center justify-between gap-4 px-4 md:px-8 py-4 bg-bg2/80 backdrop-blur-xl border-b border-border sticky top-0 z-[100]">
       <div className="flex items-center gap-3">
         <button 
           onClick={onMenuClick}
-          className="md:hidden p-2 -ml-2 text-text2 hover:text-white transition-colors"
+          className="md:hidden p-2 -ml-2 text-text2 hover:text-text transition-colors"
         >
           <Menu size={20} />
         </button>
@@ -36,7 +36,7 @@ const Topbar = ({ onMenuClick }) => {
       </div>
       
       <div className="flex items-center gap-2 sm:gap-4">
-        <div className="hidden lg:flex items-center gap-2 bg-white/[0.03] border border-white/[0.05] px-3 py-1.5 rounded-xl">
+        <div className="hidden lg:flex items-center gap-2 bg-bg3/60 border border-border px-3 py-1.5 rounded-xl">
            <Search size={14} className="text-text3" />
            <input 
              type="text" 
@@ -45,8 +45,8 @@ const Topbar = ({ onMenuClick }) => {
            />
         </div>
 
-        <div className="flex items-center gap-4 bg-bg2/50 border border-white/[0.05] px-3 py-1.5 rounded-xl">
-          <div className="flex items-center gap-2 border-r border-white/[0.05] pr-3">
+        <div className="flex items-center gap-4 bg-bg3/60 border border-border px-3 py-1.5 rounded-xl">
+          <div className="flex items-center gap-2 border-r border-border pr-3">
             <div className="relative">
               <Radio size={14} className="text-green animate-pulse" />
               <div className="absolute inset-0 bg-green/20 blur-sm rounded-full animate-ping"></div>
@@ -58,7 +58,7 @@ const Topbar = ({ onMenuClick }) => {
           </div>
         </div>
 
-        <button className="relative p-2 text-text2 hover:text-white transition-colors lg:hidden">
+        <button className="relative p-2 text-text2 hover:text-text transition-colors lg:hidden">
           <Bell size={18} />
           <span className="absolute top-1 right-1 w-2 h-2 bg-red rounded-full border-2 border-bg"></span>
         </button>

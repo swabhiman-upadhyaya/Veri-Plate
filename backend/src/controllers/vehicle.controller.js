@@ -1,5 +1,6 @@
 const Vehicle = require('../models/Vehicle.model');
 const Alert = require('../models/Alert.model');
+const ScanLog = require('../models/ScanLog.model');
 const { formatResponse } = require('../utils/response.utils');
 const { simulateOCR } = require('../services/ocr.service');
 const { generateMockVehicleData } = require('../utils/mockData');
@@ -20,7 +21,6 @@ exports.lookupPlate = async (req, res, next) => {
     }
 
     if (image && !plateNumber) {
-      // Run mock OCR
       plateNumber = await simulateOCR(image);
     }
 
@@ -28,11 +28,68 @@ exports.lookupPlate = async (req, res, next) => {
     const normalizedPlate = plateNumber.toUpperCase().replace(/[^A-Z0-9]/g, '');
 
     const mockData = generateMockVehicleData(normalizedPlate);
+    const mv = mockData.vehicle; // shorthand
 
-    // Return the mock result seamlessly simulating a real API
+    // ── Persist to MongoDB (upsert so re-lookups don't throw duplicate key) ──
+    // Extract the raw state code (first 2 chars) for the schema field
+    const stateCode = normalizedPlate.substring(0, 2);
+
+    await Vehicle.findOneAndUpdate(
+      { plateNumber: normalizedPlate },
+      {
+        $set: {
+          plateNumber:  normalizedPlate,
+          stateCode:    stateCode,
+          vehicle: {
+            make:  mv.vehicle?.make,
+            model: mv.vehicle?.model,
+            year:  mv.vehicle?.year,
+            color: mv.vehicle?.color,
+            type:  'Car',
+          },
+          owner: {
+            name:            mv.owner?.name,
+            licenseNumber:   mv.owner?.licenseNumber,
+            licenseValidity: mv.owner?.licenseValidity ? new Date(mv.owner.licenseValidity) : null,
+          },
+          insurance: {
+            provider:   mv.insurance?.provider || 'Mock General Insurance Co.',
+            expiryDate: new Date(Date.now() + (mockData.statuses.insuranceStatus === 'valid' ? 1 : -1) * 10000000000),
+          },
+          pollution: {
+            lastCheckDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+            dueDate:       mv.pollution?.dueDate ? new Date(mv.pollution.dueDate) : null,
+          },
+        },
+        // Only set history on first insert — don't overwrite existing violations
+        $setOnInsert: {
+          history: (mv.history || []).map(h => ({
+            violation:  h.violation,
+            date:       new Date(h.date),
+            fineAmount: h.fineAmount,
+          })),
+        },
+      },
+      { upsert: true, new: true }
+    );
+
+    // ── Write a ScanLog entry for every lookup ──────────────────────────────
+    await ScanLog.create({
+      plateNumber:     normalizedPlate,
+      ownerName:       mv.owner?.name,
+      licenseStatus:   mockData.statuses.licenseStatus,
+      insuranceStatus: mockData.statuses.insuranceStatus,
+      pollutionStatus: mockData.statuses.pollutionStatus,
+      violations: (mv.history || []).map(h => ({
+        violation:  h.violation,
+        fineAmount: h.fineAmount,
+        date:       new Date(h.date),
+      })),
+    });
+
     return res.status(HTTP_STATUS.OK).json(formatResponse(true, {
-      vehicle: mockData.vehicle,
-      statuses: mockData.statuses
+      vehicle: mv,
+      statuses: mockData.statuses,
     }));
 
   } catch (err) {
@@ -57,25 +114,41 @@ exports.getAlerts = async (req, res, next) => {
 // @access  Private
 exports.getHistory = async (req, res, next) => {
   try {
-    const vehicles = await Vehicle.find({ 'history.0': { $exists: true } })
-                                  .select('plateNumber history vehicle owner')
-                                  .lean();
-    
-    let allHistory = [];
-    vehicles.forEach(v => {
-      v.history.forEach(h => {
-        allHistory.push({
-          plateNumber: v.plateNumber,
-          ownerName: v.owner?.name,
-          violation: h.violation,
-          date: h.date,
-          fineAmount: h.fineAmount
+    // Return all scan log entries, newest first, limit 200
+    const logs = await ScanLog.find()
+      .sort({ scannedAt: -1 })
+      .limit(200)
+      .lean();
+
+    // Shape each log entry — if violations exist, emit one row per violation;
+    // otherwise emit one row for the scan itself (clean record)
+    const rows = [];
+    logs.forEach(log => {
+      if (log.violations && log.violations.length > 0) {
+        log.violations.forEach(v => {
+          rows.push({
+            plateNumber: log.plateNumber,
+            ownerName:   log.ownerName,
+            violation:   v.violation,
+            date:        v.date || log.scannedAt,
+            fineAmount:  v.fineAmount,
+            scannedAt:   log.scannedAt,
+          });
         });
-      });
+      } else {
+        // Clean record — show as a scan log entry with no violation
+        rows.push({
+          plateNumber: log.plateNumber,
+          ownerName:   log.ownerName,
+          violation:   'Clean Record',
+          date:        log.scannedAt,
+          fineAmount:  0,
+          scannedAt:   log.scannedAt,
+        });
+      }
     });
 
-    allHistory.sort((a,b) => b.date - a.date);
-    res.status(HTTP_STATUS.OK).json(formatResponse(true, allHistory));
+    res.status(HTTP_STATUS.OK).json(formatResponse(true, rows));
   } catch (err) {
     next(err);
   }

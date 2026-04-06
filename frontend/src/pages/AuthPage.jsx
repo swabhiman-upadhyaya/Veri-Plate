@@ -54,16 +54,16 @@ const AuthPage = () => {
       </div>
 
       <div className="max-w-md w-full relative group">
-        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-cyan/50 to-transparent"></div>
-        <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan/50 to-transparent shadow-[0_0_20px_rgba(6,182,212,0.5)]"></div>
+        <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent"></div>
+        <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-cyan/40 to-transparent shadow-[0_0_16px_rgba(154,166,178,0.4)]"></div>
         
-        <div className="bg-bg2/80 backdrop-blur-2xl border border-white/[0.05] rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-all duration-500 group-hover:border-cyan/20">
+        <div className="bg-bg2/90 backdrop-blur-2xl border border-border rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden transition-all duration-500 group-hover:border-cyan/30">
           {/* Internal Glow */}
           <div className="absolute -top-20 -left-20 w-40 h-40 bg-cyan/10 rounded-full blur-[50px]"></div>
 
           <header className="text-center mb-10 relative z-10">
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-bg3 border border-white/[0.05] rounded-2xl flex items-center justify-center text-cyan shadow-xl relative group-hover:scale-110 transition-transform duration-500">
+              <div className="w-20 h-20 bg-bg3 border border-border rounded-2xl flex items-center justify-center text-cyan shadow-xl relative group-hover:scale-110 transition-transform duration-500">
                 <Fingerprint size={40} className="relative z-10" />
                 <div className="absolute inset-0 bg-cyan/20 blur-xl rounded-full animate-pulse"></div>
               </div>
@@ -103,7 +103,7 @@ const AuthPage = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="field.officer@veriplate.gov"
-                      className="w-full bg-bg3 border border-white/[0.05] text-white font-body rounded-2xl py-4 pl-14 pr-5 focus:outline-none focus:border-cyan/50 focus:bg-bg3/80 transition-all placeholder:text-text3 text-sm font-medium"
+                      className="w-full bg-bg3 border border-border text-text font-body rounded-2xl py-4 pl-14 pr-5 focus:outline-none focus:border-cyan/60 focus:bg-bg3/90 transition-all placeholder:text-text3 text-sm font-medium"
                     />
                   </div>
                 </div>
@@ -137,12 +137,12 @@ const AuthPage = () => {
                       onChange={(e) => setOtp(e.target.value)}
                       placeholder="0 0 0  0 0 0"
                       maxLength={6}
-                      className="w-full bg-bg3 border border-white/[0.05] text-cyan font-head text-2xl text-center rounded-2xl py-5 pl-14 pr-5 focus:outline-none focus:border-cyan/50 focus:bg-bg3/80 transition-all placeholder:text-text3/50 tracking-[0.5em] font-black disabled:opacity-50"
+                      className="w-full bg-bg3 border border-border text-cyan font-head text-2xl text-center rounded-2xl py-5 pl-14 pr-5 focus:outline-none focus:border-cyan/60 focus:bg-bg3/90 transition-all placeholder:text-text3/50 tracking-[0.5em] font-black disabled:opacity-50"
                     />
                   </div>
                   <div className="flex justify-between items-center mt-5 px-1">
-                    <span className="text-[11px] text-text3 font-medium">Verify <span className="text-white font-bold">{email}</span></span>
-                    <button type="button" onClick={() => setStep(1)} className="text-[11px] text-cyan hover:text-white transition-colors bg-transparent border-none cursor-pointer font-black uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="text-[11px] text-text3 font-medium">Verify <span className="text-text font-bold">{email}</span></span>
+                    <button type="button" onClick={() => setStep(1)} className="text-[11px] text-cyan hover:text-text transition-colors bg-transparent border-none cursor-pointer font-black uppercase tracking-widest flex items-center gap-1.5">
                       <ArrowLeft size={12} /> Change
                     </button>
                   </div>

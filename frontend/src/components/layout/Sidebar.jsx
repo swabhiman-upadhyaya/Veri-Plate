@@ -25,12 +25,12 @@ const Sidebar = ({ isOpen, onClose }) => {
       />
 
       <aside className={`w-[240px] bg-bg2 border-r border-border flex flex-col fixed top-0 bottom-0 z-[120] shrink-0 transition-transform duration-300 ease-in-out md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="p-6 pb-5 border-b border-white/[0.03] flex items-center justify-between">
+        <div className="p-6 pb-5 border-b border-border flex items-center justify-between">
           <div>
             <div className="logo-text">VERIPLATE</div>
             <div className="logo-sub">SECURE ACCESS v2.4</div>
           </div>
-          <button onClick={onClose} className="md:hidden text-text2 hover:text-white p-1">
+          <button onClick={onClose} className="md:hidden text-text2 hover:text-text p-1">
             <X size={20} />
           </button>
         </div>
@@ -49,14 +49,14 @@ const Sidebar = ({ isOpen, onClose }) => {
           </NavLink>
         </nav>
         
-        <div className="p-4 border-t border-white/[0.03] bg-white/[0.01]">
-          <div className="flex items-center justify-between p-2 rounded-xl hover:bg-white/[0.04] transition-colors cursor-pointer group" onClick={handleLogout} title="Logout">
+        <div className="p-4 border-t border-border bg-bg3/20">
+          <div className="flex items-center justify-between p-2 rounded-xl hover:bg-bg3/50 transition-colors cursor-pointer group" onClick={handleLogout} title="Logout">
             <div className="flex items-center gap-3">
               <div className="w-[36px] h-[36px] rounded-xl bg-cyan-dim border border-cyan/20 flex items-center justify-center text-[13px] font-bold text-cyan shrink-0 transition-transform group-hover:scale-105">
                 {user?.email?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div className="max-w-[110px]">
-                <div className="text-[12px] font-bold text-white truncate">{user?.email || 'System User'}</div>
+                <div className="text-[12px] font-bold text-text truncate">{user?.email || 'System User'}</div>
                 <div className="text-[10px] text-text3 font-medium uppercase tracking-[0.05em]">{user?.role || 'Field Officer'}</div>
               </div>
             </div>
