@@ -1,38 +1,50 @@
-# VeriPlate — License Detection System
+# 🚗 VeriPlate — License Plate Detection System
 
-A production-ready License Plate Detection System built on the MERN stack.
+A production-ready **License Plate Detection System** built on the **MERN stack** integrated with **Machine Learning**, enabling automated vehicle identification and compliance tracking.
 
-## Architecture
-- **Frontend**: React + Vite, Tailwind CSS, Context API for state management.
-- **Backend**: Node.js, Express, MongoDB, JSON Web Tokens (JWT) for authentication.
+---
 
-## Features
-- **OTP Authentication**: Secure email-based OTP login.
-- **Real-Time Lookup**: Mock OCR service for extracting plate numbers from images.
-- **Dynamic Status**: Auto-computation of vehicle insurance, license, and pollution expiry.
-- **Automated Alerts**: Generates warnings for expiring documents.
-- **History Tracking**: Centralized log of all scanned vehicles and violations.
+## 🏗️ Architecture
 
-## Setup Instructions
+- **Frontend**: React (Vite), Tailwind CSS, Context API for state management  
+- **Backend**: Node.js, Express.js, MongoDB  
+- **Authentication**: JSON Web Tokens (JWT) with OTP-based verification  
+- **ML/OCR Layer**: Mock OCR pipeline for license plate extraction  
+
+---
+
+## ✨ Features
+
+- **🔐 OTP Authentication**  
+  Secure email-based login using One-Time Password (OTP) verification.
+
+- **📸 Real-Time Plate Detection**  
+  Extracts license plate numbers from uploaded images via OCR simulation.
+
+- **📊 Dynamic Status Engine**  
+  Automatically evaluates validity of:
+  - Vehicle Insurance  
+  - Driving License  
+  - Pollution Certificate  
+
+- **⚠️ Automated Alerts**  
+  Generates instant warnings for expired or soon-to-expire documents.
+
+- **📁 History Tracking**  
+  Maintains a centralized log of scanned vehicles and detected violations.
+
+---
+
+## ⚙️ Setup Instructions
 
 ### Prerequisites
 - Node.js (v18+)
-- MongoDB instance (local or Atlas)
+- MongoDB (Local or Atlas)
 
-### 1. Backend Setup
-1. Navigate to the `backend` directory.
-2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env` and configure your credentials.
-4. Seed the database with sample data: `npm run seed`
-5. Start the development server: `npm run dev`
+---
 
-### 2. Frontend Setup
-1. Navigate to the `frontend` directory.
-2. Install dependencies: `npm install`
-3. Copy `.env.example` to `.env`.
-4. Start the Vite server: `npm run dev`
+### 1️⃣ Backend Setup
 
-## Accessing the System
-After both servers are running, access the dashboard via `http://localhost:5173`. Use the dummy admin account created by the seed script:
-- **Email**: `admin@veriplate.com`
-- Check your console (or Ethereal Email) for the generated OTP to login.
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
