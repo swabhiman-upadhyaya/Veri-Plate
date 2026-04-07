@@ -32,19 +32,3 @@ A production-ready **License Plate Detection System** built on the **MERN stack*
 
 - **📁 History Tracking**  
   Maintains a centralized log of scanned vehicles and detected violations.
-
----
-
-## ⚙️ Setup Instructions
-
-### Prerequisites
-- Node.js (v18+)
-- MongoDB (Local or Atlas)
-
----
-
-### 1️⃣ Backend Setup
-
-1. Navigate to the backend directory:
-   ```bash
-   cd backend
